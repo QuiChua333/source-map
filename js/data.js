@@ -196,16 +196,17 @@ const TOUR_DATA = [
   {
     order: 10,
     title: "Sài Gòn - Ninh Chữ Resort 4★",
-    time: "Ngày 14/8 · 16:00 → Ngày 15/8 · 11:00",
-    lat: 11.5838,
-    lng: 109.0296,
+    time: "Ngày 14/8 · ~14:30 (nhận phòng) → Ngày 15/8 · 11:00",
+    lat: 11.5894035,
+    lng: 109.0369197,
     leg: "pivot",
     icon: "fa-hotel",
     short:
       'Teambuilding 2026 & Gala Dinner "Bước Đệm Vững Vàng – Tăng Tốc Tương Lai".',
     detail: [
-      "16:00: về Resort 4★ Sài Gòn – Ninh Chữ nghỉ ngơi, nhận phòng.",
-      "Teambuilding bãi biển 'TEAMBUILDING 2026' với chuỗi trò chơi gắn kết, giải thưởng phong phú.",
+      "~14:30: về đến Resort 4★ Sài Gòn – Ninh Chữ (cách bến Vĩnh Hy khoảng 57 phút xe), nhận phòng.",
+      "Tự do nghỉ ngơi, tắm biển, sử dụng tiện ích resort trước giờ teambuilding.",
+      "16:00: Teambuilding bãi biển 'TEAMBUILDING 2026' với chuỗi trò chơi gắn kết, giải thưởng phong phú.",
       "18:00: Gala Dinner 'Bước Đệm Vững Vàng – Tăng Tốc Tương Lai' – MC hoạt náo, BLĐ khui champagne, gameshow, trao giải teambuilding & rút thăm may mắn, văn nghệ – karaoke.",
       "22:00: tự do khám phá Vĩnh Hy về đêm; nghỉ đêm tại resort.",
       "Ngày 15/8: buffet sáng (07:00), tự do nghỉ ngơi và trả phòng lúc 11:00.",

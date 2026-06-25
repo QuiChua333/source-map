@@ -1,0 +1,1 @@
+nohup live-server --port=5500 --host=0.0.0.0 --no-browser > live.log 2>&1 &
