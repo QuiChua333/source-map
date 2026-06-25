@@ -66,6 +66,17 @@ function renderTimeline() {
     });
 }
 
+/* ---------------------------------------------------------
+   Thu gọn / mở sidebar (mở rộng bản đồ)
+   --------------------------------------------------------- */
+function toggleSidebar() {
+    const collapsed = document.body.classList.toggle('sidebar-collapsed');
+    const openBtn = document.getElementById('sidebar-open');
+    if (openBtn) openBtn.style.display = collapsed ? 'flex' : 'none';
+    // Bản đồ cần resize lại khi khung thay đổi kích thước
+    if (typeof map !== 'undefined' && map) setTimeout(() => map.resize(), 60);
+}
+
 /* Lấy cấu hình chặng bắt đầu từ điểm fromIdx */
 function getSegment(fromIdx) {
     return (typeof SEGMENTS !== 'undefined')
@@ -104,7 +115,15 @@ function openModal(idx) {
     document.getElementById('modal-num').textContent   = p.order;
     document.getElementById('modal-title').textContent = p.title;
     document.getElementById('modal-time').innerHTML    = `<i class="fa-regular fa-clock mr-1"></i>${p.time}`;
-    document.getElementById('modal-desc').textContent  = p.detail;
+    // Mô tả: hỗ trợ cả mảng (bullet) lẫn chuỗi (đoạn văn)
+    const descEl = document.getElementById('modal-desc');
+    if (Array.isArray(p.detail)) {
+        descEl.innerHTML = '<ul class="detail-list">'
+            + p.detail.map(li => `<li>${li}</li>`).join('')
+            + '</ul>';
+    } else {
+        descEl.textContent = p.detail;
+    }
 
     // Gallery động: ảnh đầu làm hero (full width), còn lại xếp lưới 2 cột
     const gallery = document.getElementById('modal-gallery');
@@ -124,11 +143,13 @@ function openModal(idx) {
         gallery.appendChild(wrap);
     });
 
-    // Nút "Xem trên bản đồ"
-    document.getElementById('modal-focus-btn').onclick = () => {
-        closeModal();
-        focusPoint(idx);
-    };
+    // Nút điều hướng điểm trước / sau (nạp lại modal cho điểm kế)
+    const prevBtn = document.getElementById('modal-prev');
+    const nextBtn = document.getElementById('modal-next');
+    prevBtn.disabled = idx === 0;
+    nextBtn.disabled = idx === TOUR_DATA.length - 1;
+    prevBtn.onclick = () => { if (idx > 0) openModal(idx - 1); };
+    nextBtn.onclick = () => { if (idx < TOUR_DATA.length - 1) openModal(idx + 1); };
 
     modal.classList.remove('hidden');
     modal.classList.add('flex');

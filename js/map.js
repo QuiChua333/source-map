@@ -37,7 +37,7 @@ function initMap() {
 
     map = new mapboxgl.Map({
         container: 'map',
-        style: 'mapbox://styles/mapbox/streets-v12',
+        style: 'mapbox://styles/mapbox/satellite-streets-v12',
         center: [108.0, 11.3],
         zoom: 6.5,
         attributionControl: true
@@ -52,6 +52,7 @@ function initMap() {
         drawBoatLine();
         drawRoutes();
         fitToBounds();
+        enableCoordPicker();   // bật chế độ lấy tọa độ nếu URL có #pick
     });
 
     // Bắt lỗi token sai / hết hạn
@@ -113,9 +114,14 @@ function buildPopupHTML(p, idx) {
             <div style="padding:12px 14px 14px;">
                 <p style="margin:0;color:${accent};font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.03em;">${p.time}</p>
                 <h3 style="margin:4px 0 0;font-size:15px;font-weight:800;color:#1e293b;line-height:1.3;">${p.title}</h3>
-                <button onclick="openModal(${idx})" style="margin-top:10px;width:100%;background:${accent};color:white;border:none;padding:8px 0;border-radius:10px;font-weight:600;font-size:13px;cursor:pointer;font-family:inherit;">
-                    Xem chi tiết
-                </button>
+                <div style="display:flex;align-items:stretch;gap:6px;margin-top:10px;">
+                    <button onclick="focusPoint(${idx - 1})" ${idx === 0 ? 'disabled' : ''} title="Điểm trước"
+                        style="flex:none;width:34px;border:1.5px solid ${accent};background:#fff;color:${accent};border-radius:10px;font-size:18px;font-weight:700;cursor:pointer;font-family:inherit;${idx === 0 ? 'opacity:.35;cursor:default;' : ''}">‹</button>
+                    <button onclick="openModal(${idx})"
+                        style="flex:1;background:${accent};color:white;border:none;padding:8px 0;border-radius:10px;font-weight:600;font-size:13px;cursor:pointer;font-family:inherit;">Xem chi tiết</button>
+                    <button onclick="focusPoint(${idx + 1})" ${idx === TOUR_DATA.length - 1 ? 'disabled' : ''} title="Điểm sau"
+                        style="flex:none;width:34px;border:1.5px solid ${accent};background:#fff;color:${accent};border-radius:10px;font-size:18px;font-weight:700;cursor:pointer;font-family:inherit;${idx === TOUR_DATA.length - 1 ? 'opacity:.35;cursor:default;' : ''}">›</button>
+                </div>
             </div>
         </div>`;
 }
@@ -152,12 +158,13 @@ async function drawRoute(stops, color, id, routeName, label) {
     }
 }
 
-/* Đường tàu Vĩnh Hy → Bãi Cóc (nét đứt, không phải đường bộ) */
+/* Đường tàu trong Vịnh Vĩnh Hy (nét đứt) — nối chuỗi điểm theo BOAT_PATH */
 function drawBoatLine() {
-    const a = TOUR_DATA[2], b = TOUR_DATA[3];
+    if (typeof BOAT_PATH === 'undefined' || !BOAT_PATH.length) return;
+    const coords = BOAT_PATH.map(i => [TOUR_DATA[i].lng, TOUR_DATA[i].lat]);
     addLineLayer('route-boat', {
         type: 'LineString',
-        coordinates: [[a.lng, a.lat], [b.lng, b.lat]]
+        coordinates: coords
     }, '#0ea5e9', true);
 }
 
@@ -292,10 +299,51 @@ function fitToBounds() {
 function focusPoint(idx) {
     if (!map) return;
     const p = TOUR_DATA[idx];
-    map.flyTo({ center: [p.lng, p.lat], zoom: 13, speed: 1.2, essential: true });
+    // Điểm trong vịnh nằm sát nhau -> zoom gần hơn để thấy rõ
+    const zoom = p.boat ? 16 : 15;
+    map.flyTo({ center: [p.lng, p.lat], zoom: zoom, speed: 1.8, curve: 1.3,  essential: true });
 
     popups.forEach((pop, i) => { if (i !== idx) pop.remove(); });
     if (!popups[idx].isOpen()) markers[idx].togglePopup();
+
+    if (typeof highlightCard === 'function') highlightCard(idx);
+}
+
+/* ---------------------------------------------------------
+   CHẾ ĐỘ CHỌN TỌA ĐỘ (Dev) — bật bằng cách thêm #pick vào URL
+   Click lên bản đồ → hiện + tự copy "lat/lng" đúng định dạng data.js
+   --------------------------------------------------------- */
+function enableCoordPicker() {
+    if (!/pick/i.test(location.hash) && !/pick/i.test(location.search)) return;
+
+    map.getCanvas().style.cursor = 'crosshair';
+
+    // Nhãn hướng dẫn góc trên-trái
+    const hint = document.createElement('div');
+    hint.style.cssText = 'position:absolute;top:10px;left:10px;z-index:30;background:#1e293b;color:#fff;'
+        + 'font:600 12px/1.4 sans-serif;padding:8px 12px;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.3);max-width:240px;';
+    hint.innerHTML = '📍 Chế độ chọn tọa độ<br><span style="font-weight:400;opacity:.85">Click lên bản đồ để lấy &amp; copy lat/lng</span>';
+    document.getElementById('map').appendChild(hint);
+
+    const pickPopup = new mapboxgl.Popup({ closeButton: true, maxWidth: '260px' });
+
+    map.on('click', (e) => {
+        const lat = e.lngLat.lat.toFixed(7);
+        const lng = e.lngLat.lng.toFixed(7);
+        const snippet = `lat: ${lat},\nlng: ${lng},`;
+
+        // Copy vào clipboard
+        if (navigator.clipboard) navigator.clipboard.writeText(snippet).catch(() => {});
+
+        pickPopup.setLngLat(e.lngLat).setHTML(
+            `<div style="font:13px/1.5 sans-serif;padding:10px 12px;">
+                <div style="font-weight:700;color:#2563eb;margin-bottom:4px;">📋 Đã copy tọa độ</div>
+                <code style="display:block;background:#f1f5f9;padding:6px 8px;border-radius:6px;white-space:pre;font-size:12px;">lat: ${lat},\nlng: ${lng},</code>
+             </div>`
+        ).addTo(map);
+
+        console.log(snippet);
+    });
 }
 
 /* ---------------------------------------------------------

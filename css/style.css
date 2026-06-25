@@ -9,6 +9,22 @@ html, body { height: 100%; font-family: 'Be Vietnam Pro', sans-serif; overflow-x
 /* Popup Mapbox không vượt quá bề ngang màn hình nhỏ */
 .mapboxgl-popup { max-width: calc(100vw - 24px) !important; }
 
+/* Header sidebar: nền ảnh Vịnh Vĩnh Hy + lớp phủ tối để chữ nổi rõ */
+.app-header {
+    background-image:
+        linear-gradient(135deg, rgba(115, 151, 212, 0.3), rgba(12, 35, 72, 0.7)),
+        url('../images/vinh-hy.jpg');
+    background-size: cover;
+    background-position: center calc(100% + 30px);
+}
+
+/* Thu gọn / mở sidebar */
+body.sidebar-collapsed #sidebar { display: none; }
+@media (max-width: 1023px) {
+    /* Trên điện thoại/tablet (xếp dọc): ẩn sidebar thì bản đồ chiếm full chiều cao */
+    body.sidebar-collapsed #map-main { height: 100dvh; }
+}
+
 /* Custom scrollbar cho sidebar / modal */
 .custom-scroll::-webkit-scrollbar { width: 8px; }
 .custom-scroll::-webkit-scrollbar-track { background: #f1f5f9; }
@@ -135,6 +151,44 @@ html, body { height: 100%; font-family: 'Be Vietnam Pro', sans-serif; overflow-x
 
 .gallery-img { transition: transform 0.4s ease; }
 .gallery-img:hover { transform: scale(1.04); }
+
+/* Nút điều hướng trước/sau trong modal chi tiết */
+.modal-nav {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid #cbd5e1;
+    background: #fff;
+    color: #2563eb;
+    border-radius: 12px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.modal-nav:hover:not(:disabled) { border-color: #2563eb; background: #eff6ff; }
+.modal-nav:disabled { opacity: 0.35; cursor: default; color: #94a3b8; }
+
+/* Danh sách bullet trong modal chi tiết */
+.detail-list { list-style: none; margin: 0; padding: 0; }
+.detail-list li {
+    position: relative;
+    padding-left: 22px;
+    margin-bottom: 10px;
+    line-height: 1.55;
+}
+.detail-list li:last-child { margin-bottom: 0; }
+.detail-list li::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 8px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #2563eb;
+}
 
 /* Animation keyframes (bổ trợ cho Tailwind config) */
 @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
