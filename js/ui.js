@@ -57,9 +57,11 @@ function renderTimeline() {
             const segEl = document.createElement('div');
             segEl.id = 'seg-' + idx;
             segEl.className = 'segment' + (seg && seg.mode === 'boat' ? ' boat' : '');
-            const initial = (seg && seg.mode === 'boat')
-                ? '<i class="fa-solid fa-ship"></i> Đi tàu đáy kính · ~15 phút'
-                : '<i class="fa-solid fa-spinner fa-spin"></i> Đang tính lộ trình…';
+            const initial = (seg && seg.text)
+                ? seg.text
+                : (seg && seg.mode === 'boat')
+                    ? '<i class="fa-solid fa-ship"></i> Đi tàu đáy kính · ~15 phút'
+                    : '<i class="fa-solid fa-spinner fa-spin"></i> Đang tính lộ trình…';
             segEl.innerHTML = `<span class="seg-text">${initial}</span>`;
             container.appendChild(segEl);
         }

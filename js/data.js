@@ -2,7 +2,7 @@
    DỮ LIỆU TOUR · Ninh Chữ - Vĩnh Hy 2N2Đ
    Company Trip 2026 · Đoàn Vina Takeuchi · Đêm 13 – 15/8/2026
    Nguồn: Chương trình chính thức Viet Sun Travel (PDF)
-   - order: thứ tự hiển thị (1..13)
+   - order: thứ tự hiển thị (1..15)
    - leg:   'go' (lượt đi) | 'back' (lượt về) | 'pivot' (resort - giao điểm)
    - boat:  true nếu là điểm tham quan bằng tàu trong Vịnh Vĩnh Hy
    - detail: MẢNG các ý (mỗi phần tử là 1 gạch đầu dòng)
@@ -195,21 +195,19 @@ const TOUR_DATA = [
   },
   {
     order: 10,
-    title: "Sài Gòn - Ninh Chữ Resort 4★",
-    time: "Ngày 14/8 · ~14:30 (nhận phòng) → Ngày 15/8 · 11:00",
+    title: "Sài Gòn - Ninh Chữ Resort 4★ (Nhận phòng & Teambuilding)",
+    time: "Ngày 14/8 · 14:30 – 18:00",
     lat: 11.5894035,
     lng: 109.0369197,
     leg: "pivot",
     icon: "fa-hotel",
     short:
-      'Teambuilding 2026 & Gala Dinner "Bước Đệm Vững Vàng – Tăng Tốc Tương Lai".',
+      'Nhận phòng nghỉ ngơi & Teambuilding bãi biển "TEAMBUILDING 2026".',
     detail: [
       "~14:30: về đến Resort 4★ Sài Gòn – Ninh Chữ (cách bến Vĩnh Hy khoảng 57 phút xe), nhận phòng.",
       "Tự do nghỉ ngơi, tắm biển, sử dụng tiện ích resort trước giờ teambuilding.",
       "16:00: Teambuilding bãi biển 'TEAMBUILDING 2026' với chuỗi trò chơi gắn kết, giải thưởng phong phú.",
-      "18:00: Gala Dinner 'Bước Đệm Vững Vàng – Tăng Tốc Tương Lai' – MC hoạt náo, BLĐ khui champagne, gameshow, trao giải teambuilding & rút thăm may mắn, văn nghệ – karaoke.",
-      "22:00: tự do khám phá Vĩnh Hy về đêm; nghỉ đêm tại resort.",
-      "Ngày 15/8: buffet sáng (07:00), tự do nghỉ ngơi và trả phòng lúc 11:00.",
+      "18:00: di chuyển đến Nhà hàng Lộc Phú (Phan Rang – Tháp Chàm) tham gia Gala Dinner.",
     ],
     images: [
       "https://saigontourist.com.vn/files/images/luu-tru/luu-tru-mien-trung/saigonninhchuhotel-1.jpg",
@@ -224,6 +222,48 @@ const TOUR_DATA = [
   },
   {
     order: 11,
+    title: "Gala Dinner · Nhà hàng Lộc Phú",
+    time: "Ngày 14/8 · 18:00 – 22:00",
+    lat: 11.5577998,
+    lng: 108.9949849,
+    leg: "pivot",
+    icon: "fa-champagne-glasses",
+    short:
+      "Gala Dinner 'Bước Đệm Vững Vàng – Tăng Tốc Tương Lai' tại Nhà hàng Lộc Phú, Phan Rang – Tháp Chàm.",
+    detail: [
+      "18:00: đoàn di chuyển từ resort đến Nhà hàng Lộc Phú (25 Hải Thượng Lãn Ông, P. Tấn Tài, Phan Rang – Tháp Chàm) tham gia Gala Dinner.",
+      "Gala Dinner 'Bước Đệm Vững Vàng – Tăng Tốc Tương Lai': MC hoạt náo, BLĐ khui champagne, gameshow sôi động.",
+      "Trao giải teambuilding & rút thăm may mắn, chương trình văn nghệ – karaoke giao lưu.",
+      "22:00: kết thúc tiệc, đoàn trở về lại resort nghỉ đêm.",
+    ],
+    images: [
+      "https://scontent.fsgn13-2.fna.fbcdn.net/v/t39.30808-6/707289237_1598496665613540_1207776434692471922_n.jpg?stp=dst-jpg_tt6&cstp=mx956x1276&ctp=s956x1276&_nc_cat=106&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeEiwTz_Qs5J20OQYbwglz5f3Lrb4Pu87pTcutvg-7zulCvG6IWOoOy7sHCPjv8snVc9iEizfU4w5cMYZU_kegmz&_nc_ohc=D5_hoUK3cuMQ7kNvwFigGP1&_nc_oc=Adpsa-Y6Ccy7k2TypeT-i9ifG7xKAJtShltxnzYobsdHbfy70ckapMWFRqLH4Abk3UQ&_nc_zt=23&_nc_ht=scontent.fsgn13-2.fna&_nc_gid=BMbuovIfEC0H9VgBqrZCSQ&_nc_ss=7a2a8&oh=00_Af8ojMHN066Q6lwU3ptUDFzhaXX-RdX5iYtvjxlbOwMxPQ&oe=6A44234B",
+      "https://scontent.fsgn3-1.fna.fbcdn.net/v/t39.30808-6/710745753_1604288511701022_953841480289448186_n.jpg?stp=dst-jpg_tt6&cstp=mx1082x1440&ctp=s1082x1440&_nc_cat=107&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeEg7Dk7WGUIHE3efIkLIiKzgPXl1iYWVDiA9eXWJhZUONFG8bfxkNttNbi9PnOWH6Wo0bBl9zZ3_NIAqB95YeOc&_nc_ohc=puGPnb4FresQ7kNvwEAEmAX&_nc_oc=AdqTUb9Atp9RLpk08YnXT8k6t0ECEevHM9CxmxSk63zngjzTvt9JC-W9O1MAIZPCSpI&_nc_zt=23&_nc_ht=scontent.fsgn3-1.fna&_nc_gid=eJ2sxOL7aWANg1-p0HOMmQ&_nc_ss=7a2a8&oh=00_Af-hxLfTco0VbSVwjb0IiUu8SSzPCOS0P3v8peKciubBqw&oe=6A440634",
+    ],
+  },
+  {
+    order: 12,
+    title: "Về lại Resort nghỉ đêm",
+    time: "Ngày 14/8 · 22:00 → Ngày 15/8 · 11:00",
+    lat: 11.5899535,
+    lng: 109.0374697,
+    leg: "pivot",
+    icon: "fa-bed",
+    short:
+      "Sau Gala, đoàn trở về Resort 4★ Sài Gòn – Ninh Chữ nghỉ đêm; sáng 15/8 trả phòng.",
+    detail: [
+      "22:00: kết thúc tiệc Gala, đoàn trở về lại Resort 4★ Sài Gòn – Ninh Chữ nghỉ ngơi.",
+      "Tự do khám phá Ninh Chữ – Vĩnh Hy về đêm; nghỉ đêm tại resort.",
+      "Ngày 15/8: buffet sáng (07:00), tự do nghỉ ngơi, tắm biển.",
+      "11:00: làm thủ tục trả phòng, lên xe bắt đầu hành trình về TP.HCM.",
+    ],
+    images: [
+      "https://saigontourist.com.vn/files/images/luu-tru/luu-tru-mien-trung/saigonninhchuhotel-2.jpg",
+      "https://saigonninhchuhotel.com.vn/wp-content/uploads/2019/06/Hotel-landscape-1.jpg",
+    ],
+  },
+  {
+    order: 13,
     title: "Vườn Nho",
     time: "Ngày 15/8 · Trưa (sau khi trả phòng)",
     lat: 11.5443,
@@ -245,7 +285,7 @@ const TOUR_DATA = [
     ],
   },
   {
-    order: 12,
+    order: 14,
     title: "Bò Sữa Long Thành, Đồng Nai",
     time: "Ngày 15/8 · Buổi chiều",
     lat: 10.8918763,
@@ -265,7 +305,7 @@ const TOUR_DATA = [
     ],
   },
   {
-    order: 13,
+    order: 15,
     title: "Về đến TP.HCM",
     time: "Ngày 15/8 · 18:30",
     lat: 10.851644,
@@ -295,8 +335,9 @@ const TOUR_DATA = [
    BOAT_PATH: chuỗi điểm trong vịnh, nối bằng đường tàu nét đứt (vòng khép kín bến → ... → bến)
    ========================================================= */
 const GO_STOPS = [0, 1, 2, 9];        // HCM → Hang Rái → bến Vĩnh Hy → Resort (bỏ các điểm tàu)
-const BACK_STOPS = [9, 10, 11, 12];   // Resort → Vườn Nho → Long Thành → HCM
+const BACK_STOPS = [11, 12, 13, 14];  // Resort (nghỉ đêm) → Vườn Nho → Long Thành → HCM (sáng 15/8)
 const BOAT_PATH = [2, 3, 4, 5, 6, 7, 8]; // bến → Mũi Cá Ông → Hang Yến → Hòn Rùa → Bãi Cóc → bè nổi → về bến
+const EVENING_PATH = [9, 10, 11];         // tối 14/8: resort → Nhà hàng Lộc Phú (dự Gala) → về lại resort
 
 const SEGMENTS = [
   { from: 0, to: 1, mode: "drive", route: "go", legIdx: 0 },    // HCM → Hang Rái
@@ -308,7 +349,11 @@ const SEGMENTS = [
   { from: 6, to: 7, mode: "boat", route: "go" },                // Bãi Cóc → bè nổi
   { from: 7, to: 8, mode: "boat", route: "go" },                // bè nổi → về bến
   { from: 8, to: 9, mode: "drive", route: "go", legIdx: 2 },    // bến Vĩnh Hy → Resort (đường bộ)
-  { from: 9, to: 10, mode: "drive", route: "back", legIdx: 0 }, // Resort → Vườn Nho
-  { from: 10, to: 11, mode: "drive", route: "back", legIdx: 1 },// Vườn Nho → Long Thành
-  { from: 11, to: 12, mode: "drive", route: "back", legIdx: 2 },// Long Thành → HCM
+  { from: 9, to: 10, mode: "drive", route: "evening",          // tối 14/8: Resort → Nhà hàng Lộc Phú (dự Gala)
+    text: '<i class="fa-solid fa-car-side"></i> 18:00 đi dự Gala · ~15 phút (≈ 6 km)' },
+  { from: 10, to: 11, mode: "drive", route: "evening",         // 22:00 Gala kết thúc → về lại resort nghỉ đêm
+    text: '<i class="fa-solid fa-moon"></i> 22:00 về lại resort · ~15 phút (≈ 6 km)' },
+  { from: 11, to: 12, mode: "drive", route: "back", legIdx: 0 },// (sáng 15/8) Resort → Vườn Nho
+  { from: 12, to: 13, mode: "drive", route: "back", legIdx: 1 },// Vườn Nho → Long Thành
+  { from: 13, to: 14, mode: "drive", route: "back", legIdx: 2 },// Long Thành → HCM
 ];

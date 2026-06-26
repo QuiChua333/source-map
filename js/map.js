@@ -50,6 +50,7 @@ function initMap() {
         document.getElementById('map-loading').style.display = 'none';
         createMarkers();
         drawBoatLine();
+        drawEveningLine();
         drawRoutes();
         fitToBounds();
         enableCoordPicker();   // bật chế độ lấy tọa độ nếu URL có #pick
@@ -166,6 +167,16 @@ function drawBoatLine() {
         type: 'LineString',
         coordinates: coords
     }, '#0ea5e9', true);
+}
+
+/* Đường đi-về buổi tối 14/8 (nét đứt tím) — resort → Nhà hàng Lộc Phú dự Gala → về lại resort */
+function drawEveningLine() {
+    if (typeof EVENING_PATH === 'undefined' || !EVENING_PATH.length) return;
+    const coords = EVENING_PATH.map(i => [TOUR_DATA[i].lng, TOUR_DATA[i].lat]);
+    addLineLayer('route-evening', {
+        type: 'LineString',
+        coordinates: coords
+    }, '#7c3aed', true);
 }
 
 /* Thêm 1 layer line vào bản đồ */
