@@ -245,8 +245,8 @@ const TOUR_DATA = [
     order: 12,
     title: "Về lại Resort nghỉ đêm",
     time: "Ngày 14/8 · 22:00 → Ngày 15/8 · 11:00",
-    lat: 11.5899535,
-    lng: 109.0374697,
+    lat: 11.5894035,
+    lng: 109.0369197,
     leg: "pivot",
     icon: "fa-bed",
     short:
