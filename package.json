@@ -1,0 +1,7 @@
+{
+  "name": "vst-tour-map",
+  "private": true,
+  "dependencies": {
+    "mongoose": "^8.5.0"
+  }
+}

@@ -1,0 +1,294 @@
+/* =========================================================
+   Sắp xếp chỗ ngồi · seat.html — Vertical sleeper bus
+   Inspired by Vexere / FutaBus / redBus seat-map patterns
+   ========================================================= */
+
+/* ── Bus container (vertical) ── */
+.bus-v {
+    display: inline-flex;
+    flex-direction: column;
+    background: #f8fafc;
+    border: 2.5px solid #94a3b8;
+    border-radius: 18px 18px 8px 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.10);
+}
+
+/* ── Head: driver + entrance (top) ── */
+.bus-v-front {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: linear-gradient(90deg, #1e3a8a 0%, #2563eb 100%);
+    color: white;
+    border-bottom: 2.5px solid #1e3a8a;
+    border-radius: 16px 16px 0 0;
+}
+
+.driver-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+.driver-area i { font-size: 18px; opacity: 0.9; }
+
+.entrance-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    opacity: 0.75;
+}
+.entrance-area i { font-size: 14px; }
+
+.driver-area span,
+.entrance-area span {
+    font-size: 7px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 1.1;
+}
+
+/* ── Tail (bottom) ── */
+.bus-v-back {
+    text-align: center;
+    padding: 7px 8px;
+    background: #334155;
+    color: #94a3b8;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-top: 2px solid #1e293b;
+}
+
+/* ── Seat area: 3 columns ── */
+.bus-v-seats {
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    gap: 0;
+    background: #f8fafc;
+}
+
+/* ── Column of seats ── */
+.bus-col {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* ── Aisle between columns ── */
+.bus-aisle-v {
+    flex-shrink: 0;
+    width: 14px;
+}
+
+/* ── Seat cell (fixed size) ── */
+.seat {
+    width: 66px;
+    height: 62px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    border-radius: 7px;
+    border: 1.5px solid #d1d5db;
+    background: white;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+/* Seat content wrapper */
+.seat-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+    min-width: 0;
+    padding: 2px 3px 0;
+}
+
+.seat-num {
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1;
+    color: #64748b;
+}
+
+.seat-name {
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 1.15;
+    text-align: center;
+    color: #94a3b8;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Pillow strip (bottom — facing tail) */
+.seat::after {
+    content: '';
+    flex-shrink: 0;
+    height: 8px;
+    background: #e2e8f0;
+}
+
+/* ── Empty seat ── */
+.seat--empty {
+    background: #ffffff;
+    border-color: #e2e8f0;
+}
+.seat--empty::after { background: #e2e8f0; }
+.seat--empty .seat-num { color: #94a3b8; }
+.seat--empty .seat-name { color: #cbd5e1; }
+
+/* ── T1 occupied ── */
+.seat--occupied {
+    background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
+    border-color: #60a5fa;
+    box-shadow: 0 1px 4px rgba(59, 130, 246, 0.15);
+}
+.seat--occupied::after { background: #3b82f6; }
+.seat--occupied .seat-num { color: #1d4ed8; }
+.seat--occupied .seat-name { color: #1e40af; font-weight: 600; }
+
+/* ── T2 occupied ── */
+.seat--occupied.seat--t2 {
+    background: linear-gradient(180deg, #fff7ed 0%, #ffedd5 100%);
+    border-color: #fb923c;
+    box-shadow: 0 1px 4px rgba(249, 115, 22, 0.15);
+}
+.seat--occupied.seat--t2::after { background: #f97316; }
+.seat--occupied.seat--t2 .seat-num { color: #ea580c; }
+.seat--occupied.seat--t2 .seat-name { color: #9a3412; font-weight: 600; }
+
+/* ── No seat (row 7 col C) ── */
+.seat--none {
+    visibility: hidden;
+}
+.seat--none::after { display: none; }
+
+/* ── No-seat cursor reset ── */
+.seat--none { cursor: default; }
+
+/* ── Unlocked (editable) ── */
+.bus-v-seats.unlocked .seat--empty:hover {
+    border-color: #34d399;
+    background: #f0fdf4;
+    transform: scale(1.06);
+    box-shadow: 0 3px 10px rgba(16, 185, 129, 0.2);
+}
+.bus-v-seats.unlocked .seat--empty:hover::after { background: #34d399; }
+.bus-v-seats.unlocked .seat--occupied:hover {
+    filter: brightness(0.95);
+    transform: scale(1.06);
+}
+
+/* ── Edit banner ── */
+#edit-banner {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #fef9c3;
+    border-bottom: 1px solid #fde047;
+    color: #713f12;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 7px 16px;
+}
+#edit-banner.visible { display: flex; }
+
+/* ── Passenger list ── */
+.passenger-list { list-style: none; margin: 0; padding: 0; }
+
+.passenger-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 13px;
+}
+.passenger-item:last-child { border-bottom: none; }
+
+.passenger-badge {
+    flex-shrink: 0;
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800;
+    background: #dbeafe; color: #1d4ed8;
+}
+.passenger-badge.t2 { background: #ffedd5; color: #c2410c; }
+.passenger-name {
+    flex: 1; color: #1e293b; font-weight: 500;
+    min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.passenger-empty { color: #cbd5e1; font-style: italic; }
+
+/* ── List tabs ── */
+.list-tab {
+    color: #94a3b8;
+    border-bottom: 2px solid transparent;
+}
+.list-tab:hover { color: #64748b; }
+.list-tab.active {
+    color: #1d4ed8;
+    border-bottom-color: #3b82f6;
+}
+
+/* ── Modal ── */
+#seat-modal { display: none; }
+#seat-modal.open { display: flex; }
+
+/* ── Skeleton loading ── */
+@keyframes skeleton-pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+}
+
+.seat--skeleton {
+    background: #f1f5f9;
+    border-color: #e2e8f0;
+    cursor: default;
+    pointer-events: none;
+}
+.seat--skeleton::after { background: #e2e8f0; }
+
+.seat--skeleton .skeleton-bar {
+    border-radius: 4px;
+    background: #e2e8f0;
+    animation: skeleton-pulse 1.2s ease-in-out infinite;
+}
+.seat--skeleton .skeleton-num {
+    width: 22px;
+    height: 12px;
+    margin-bottom: 3px;
+}
+.seat--skeleton .skeleton-name {
+    width: 38px;
+    height: 8px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+    .bus-v-front { gap: 14px; padding: 8px 10px; }
+    .bus-v-front i { font-size: 14px; }
+    .seat { width: 50px; height: 52px; border-radius: 6px; }
+    .seat::after { height: 6px; }
+    .seat-num { font-size: 12px; }
+    .seat-name { font-size: 8px; }
+    .bus-col { gap: 3px; }
+    .bus-aisle-v { width: 8px; }
+    .bus-v-seats { padding: 6px; }
+}

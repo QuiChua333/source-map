@@ -4,3 +4,4 @@
    Lấy Access Token tại: https://account.mapbox.com/access-tokens/
    ========================================================= */
 window.MAPBOX_TOKEN = 'YOUR_MAPBOX_TOKEN';
+window.SEAT_PIN = 'YOUR_PIN';   // PIN để mở chế độ chỉnh sửa chỗ ngồi
