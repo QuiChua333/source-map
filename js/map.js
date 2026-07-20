@@ -358,6 +358,60 @@ function enableCoordPicker() {
 }
 
 /* ---------------------------------------------------------
+   Vị trí hiện tại (GPS)
+   --------------------------------------------------------- */
+let locateMarker = null;
+let locateWatchId = null;
+
+function locateMe() {
+    const btn = document.getElementById('locate-btn');
+    if (!navigator.geolocation) {
+        alert('Trình duyệt không hỗ trợ GPS.');
+        return;
+    }
+
+    if (locateWatchId !== null) {
+        navigator.geolocation.clearWatch(locateWatchId);
+        locateWatchId = null;
+        if (locateMarker) { locateMarker.remove(); locateMarker = null; }
+        btn.classList.remove('text-blue-600', 'bg-blue-50');
+        btn.classList.add('text-brand-700');
+        return;
+    }
+
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+
+    locateWatchId = navigator.geolocation.watchPosition(
+        (pos) => {
+            const { latitude: lat, longitude: lng } = pos.coords;
+
+            btn.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i>';
+            btn.classList.remove('text-brand-700');
+            btn.classList.add('text-blue-600', 'bg-blue-50');
+
+            if (!locateMarker) {
+                const el = document.createElement('div');
+                el.className = 'locate-dot';
+                el.innerHTML = '<div class="locate-ping"></div><div class="locate-core"></div>';
+                locateMarker = new mapboxgl.Marker({ element: el })
+                    .setLngLat([lng, lat])
+                    .addTo(map);
+                map.flyTo({ center: [lng, lat], zoom: 14, speed: 1.5 });
+            } else {
+                locateMarker.setLngLat([lng, lat]);
+            }
+        },
+        (err) => {
+            btn.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i>';
+            locateWatchId = null;
+            if (err.code === 1) alert('Vui lòng cho phép truy cập vị trí.');
+            else alert('Không thể xác định vị trí.');
+        },
+        { enableHighAccuracy: true, maximumAge: 5000 }
+    );
+}
+
+/* ---------------------------------------------------------
    Hiển thị thông báo lỗi trên vùng bản đồ
    --------------------------------------------------------- */
 function showMapError(title, desc) {

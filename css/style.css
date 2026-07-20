@@ -199,6 +199,35 @@ body.sidebar-collapsed #sidebar { display: none; }
 .animate-fadeIn  { animation: fadeIn 0.25s ease-out; }
 .animate-scaleIn { animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
 
+/* Chấm vị trí hiện tại (GPS) */
+.locate-dot {
+    position: relative;
+    width: 20px;
+    height: 20px;
+}
+.locate-core {
+    position: absolute;
+    top: 4px; left: 4px;
+    width: 12px; height: 12px;
+    background: #2563eb;
+    border: 2.5px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 1px 6px rgba(37,99,235,0.5);
+    z-index: 2;
+}
+.locate-ping {
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    background: rgba(37,99,235,0.2);
+    animation: locate-pulse 2s ease-out infinite;
+    z-index: 1;
+}
+@keyframes locate-pulse {
+    0%   { transform: scale(0.5); opacity: 1; }
+    100% { transform: scale(2.5); opacity: 0; }
+}
+
 /* Giới hạn 2 dòng cho mô tả ngắn (line-clamp dự phòng) */
 .line-clamp-2 {
     display: -webkit-box;

@@ -1,0 +1,151 @@
+[
+    {
+        "id": "night-1",
+        "label": "ĐÊM 01",
+        "date": "13/8/2026",
+        "subtitle": "TP. HCM – VĨNH HY",
+        "color": "purple",
+        "meals": [],
+        "events": [
+            {
+                "id": "ev-1",
+                "timeDisplay": "23:00",
+                "isoVN": "2026-08-13T23:00:00+07:00",
+                "title": "Xe đón khách",
+                "body": "Tập trung tại điểm hẹn, lên xe nghỉ qua đêm",
+                "detail": "Xe và HDV Việt Sun đón quý khách tại điểm hẹn khởi hành đến với. Nghỉ qua đêm trên xe. Tham gia các chương trình đố vui & giải trí.",
+                "subitems": []
+            }
+        ]
+    },
+    {
+        "id": "day-1",
+        "label": "NGÀY 1",
+        "date": "14/8/2026",
+        "subtitle": "VỊNH VĨNH HY – TEAM BUILDING – GALA DINNER",
+        "color": "blue",
+        "meals": ["Sáng", "Trưa", "Tối"],
+        "events": [
+            {
+                "id": "ev-2",
+                "timeDisplay": "05:30",
+                "isoVN": "2026-08-14T05:30:00+07:00",
+                "title": "Bữa sáng & Hang Rái",
+                "body": "Dùng bữa sáng tại nhà hàng, di chuyển đến Hang Rái",
+                "detail": "Dùng bữa sáng tại nhà hàng. Di chuyển đến Hang Rái – tuyệt tác thiên nhiên của Ninh Thuận, nổi tiếng với bãi đá san hô cổ, khung cảnh biển trời hùng vĩ và hiện tượng \"thác nước trên biển\" độc đáo.",
+                "subitems": []
+            },
+            {
+                "id": "ev-3",
+                "timeDisplay": "08:30",
+                "isoVN": "2026-08-14T08:30:00+07:00",
+                "title": "Tàu Vĩnh Hy – Lặn san hô & Chèo SUP",
+                "body": "Khởi hành tàu đáy kính khám phá Vịnh Vĩnh Hy",
+                "detail": "Khởi hành đến bến tàu Vĩnh Hy – đoàn trải nghiệm khám phá Vịnh Vĩnh Hy – Lặn ngắm san hô & Trải nghiệm chèo SUP.",
+                "subitems": [
+                    "Tàu đáy kính đưa đoàn tham quan: Mũi Cá Ông, Đá Robot, Hang Yến hoặc Hòn Rùa",
+                    "Lặn biển, chèo SUP tại khu vực an toàn với đầy đủ kính lặn, ống thở, áo phao",
+                    "Chiêm ngưỡng san hô rực rỡ sắc màu, các loài sinh vật biển đa dạng",
+                    "Kết thúc hành trình tại Bãi Cóc – tắm biển, thưởng thức hải sản tươi sống"
+                ]
+            },
+            {
+                "id": "ev-4",
+                "timeDisplay": "12:30",
+                "isoVN": "2026-08-14T12:30:00+07:00",
+                "title": "Bữa trưa trên bè",
+                "body": "Thưởng thức bữa trưa trên bè tại Vịnh",
+                "detail": "Thưởng thức bữa trưa trên bè tại Vịnh Vĩnh Hy với các món hải sản tươi ngon đặc trưng.",
+                "subitems": []
+            },
+            {
+                "id": "ev-5",
+                "timeDisplay": "14:00",
+                "isoVN": "2026-08-14T14:00:00+07:00",
+                "title": "Về resort nghỉ ngơi",
+                "body": "Đoàn về resort nghỉ ngơi, tự do tham quan",
+                "detail": "Đoàn về resort nghỉ ngơi. Tự do tham quan và sử dụng các dịch vụ tiện ích tại resort.",
+                "subitems": []
+            },
+            {
+                "id": "ev-6",
+                "timeDisplay": "16:00",
+                "isoVN": "2026-08-14T16:00:00+07:00",
+                "title": "Teambuilding 2026",
+                "body": "Tập trung tại bãi biển tham gia Teambuilding",
+                "detail": "Tập trung tại bãi biển tham gia chương trình \"TEAMBUILDING 2026\", những trò chơi vui nhộn, giải thưởng phong phú chắc chắn sẽ cho Quý du khách cảm giác thật sự vui tươi và thoải mái.",
+                "subitems": []
+            },
+            {
+                "id": "ev-7",
+                "timeDisplay": "18:00",
+                "isoVN": "2026-08-14T18:00:00+07:00",
+                "title": "Gala Dinner \"Bước Đệm Vững Vàng – Tăng Tốc Tương Lai\"",
+                "body": "Tham dự Gala Dinner tại nhà hàng",
+                "detail": "Tham dự chương trình Gala Dinner \"Bước Đệm Vững Vàng – Tăng Tốc Tương Lai\" tại nhà hàng.",
+                "subitems": [
+                    "Ổn định chỗ ngồi – MC hoạt náo sôi động",
+                    "MC giới thiệu – BLĐ phát biểu – Khui champagne khai tiệc",
+                    "Tham dự gameshow Việt Sun tổ chức",
+                    "Trao giải teambuilding và rút thăm may mắn",
+                    "Giao lưu văn nghệ - Karaoke"
+                ]
+            },
+            {
+                "id": "ev-8",
+                "timeDisplay": "22:00",
+                "isoVN": "2026-08-14T22:00:00+07:00",
+                "title": "Kết thúc chương trình",
+                "body": "Tự do khám phá Vĩnh Hy về đêm",
+                "detail": "Kết thúc chương trình. Tự do khám phá Vĩnh Hy về đêm.",
+                "subitems": []
+            }
+        ]
+    },
+    {
+        "id": "day-2",
+        "label": "NGÀY 2",
+        "date": "15/8/2026",
+        "subtitle": "NINH CHỮ – TP. HCM",
+        "color": "orange",
+        "meals": ["Sáng", "Trưa"],
+        "events": [
+            {
+                "id": "ev-9",
+                "timeDisplay": "07:00",
+                "isoVN": "2026-08-15T07:00:00+07:00",
+                "title": "Bữa sáng buffet tại resort",
+                "body": "Dùng bữa sáng buffet, tự do nghỉ ngơi",
+                "detail": "Dùng bữa sáng buffet tại resort. Tự do nghỉ ngơi, tham quan và sử dụng các dịch vụ tiện ích tại resort.",
+                "subitems": []
+            },
+            {
+                "id": "ev-10",
+                "timeDisplay": "11:00",
+                "isoVN": "2026-08-15T11:00:00+07:00",
+                "title": "Trả phòng & Cơm trưa",
+                "body": "Làm thủ tục trả phòng, dùng cơm trưa tại nhà hàng",
+                "detail": "Làm thủ tục trả phòng. Dùng cơm trưa tại Nhà Hàng.",
+                "subitems": []
+            },
+            {
+                "id": "ev-11",
+                "timeDisplay": "13:00",
+                "isoVN": "2026-08-15T13:00:00+07:00",
+                "title": "Vườn nho Ninh Thuận",
+                "body": "Tham quan vườn nho, thưởng thức đặc sản",
+                "detail": "Tham quan vườn nho Ninh Thuận – vùng đất nổi tiếng với những vườn nho xanh mát, tận tay trải nghiệm không gian miệt vườn và thưởng thức các đặc sản thơm ngon được chế biến từ nho như mật nho, rượu nho.",
+                "subitems": []
+            },
+            {
+                "id": "ev-12",
+                "timeDisplay": "18:30",
+                "isoVN": "2026-08-15T18:30:00+07:00",
+                "title": "Về TP.HCM",
+                "body": "Trả khách về điểm đón ban đầu",
+                "detail": "Tiếp tục hành trình về lại TP.HCM. Dừng chân tại Bò Sữa Long Thành. Trả khách về lại điểm đón ban đầu. Chia tay đoàn – hẹn gặp lại.",
+                "subitems": []
+            }
+        ]
+    }
+]

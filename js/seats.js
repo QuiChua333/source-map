@@ -214,7 +214,7 @@ function onSeatClick(e) {
 }
 
 function onPinUnlock() {
-    const pin = String(window.SEAT_PIN || '2026');
+    const pin = String(window.SEAT_PIN || '');
     const entered = prompt('Nhập PIN để mở chế độ chỉnh sửa:');
     if (entered === null) return;
     if (entered === pin) {
