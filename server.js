@@ -51,7 +51,7 @@ const scheduleSchema = new mongoose.Schema({
 const Schedule = mongoose.models.Schedule || mongoose.model('Schedule', scheduleSchema);
 
 // ── Firebase Admin ──
-const serviceAccount = require('./learn-firebase-f6a95-firebase-adminsdk-fbsvc-2b6ecd7031.json');
+const serviceAccount = require('./firebase-adminsdk.json');
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
 });
