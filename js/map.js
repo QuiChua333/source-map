@@ -13,6 +13,7 @@ let map;
 let markers = [];   // mảng mapboxgl.Marker
 let popups = [];    // mảng mapboxgl.Popup tương ứng
 let legVisible = { go: true, back: true };   // trạng thái bật/tắt mỗi tuyến
+let coordGroups = {};  // 'lat,lng' -> [indices] — nhóm marker trùng toạ độ
 
 /* ---------------------------------------------------------
    Màu theo chặng
@@ -71,30 +72,49 @@ function initMap() {
    Tạo Marker có đánh số (HTML element + SVG)
    --------------------------------------------------------- */
 function createMarkers() {
+    coordGroups = {};
     TOUR_DATA.forEach((p, idx) => {
+        const key = `${p.lat},${p.lng}`;
+        if (!coordGroups[key]) coordGroups[key] = [];
+        coordGroups[key].push(idx);
+    });
+
+    TOUR_DATA.forEach((p, idx) => {
+        const key = `${p.lat},${p.lng}`;
+        const group = coordGroups[key];
+        const isPrimary = group[0] === idx;
         const color = legColor(p.leg);
 
         const el = document.createElement('div');
         el.style.cursor = 'pointer';
-        el.innerHTML = `
-            <svg xmlns="http://www.w3.org/2000/svg" width="44" height="54" viewBox="0 0 44 54">
-                <path d="M22 0C9.85 0 0 9.85 0 22c0 14 22 32 22 32s22-18 22-32C44 9.85 34.15 0 22 0z" fill="${color}"/>
-                <circle cx="22" cy="22" r="15" fill="white"/>
-                <text x="22" y="28" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="${color}" text-anchor="middle">${p.order}</text>
-            </svg>`;
+
+        if (group.length > 1 && !isPrimary) {
+            el.style.display = 'none';
+        }
+
+        if (isPrimary && group.length > 1) {
+            const label = group.map(i => TOUR_DATA[i].order).join('+');
+            el.innerHTML = buildMarkerSVG(label, color);
+        } else {
+            el.innerHTML = buildMarkerSVG(String(p.order), color);
+        }
+
+        const popupHTML = (isPrimary && group.length > 1)
+            ? buildGroupPopupHTML(group)
+            : buildPopupHTML(p, idx);
 
         const popup = new mapboxgl.Popup({
             offset: 30,
             closeButton: true,
-            maxWidth: '260px'
-        }).setLngLat([p.lng, p.lat]).setHTML(buildPopupHTML(p, idx));
+            maxWidth: '280px'
+        }).setLngLat([p.lng, p.lat]).setHTML(popupHTML);
 
         const marker = new mapboxgl.Marker({ element: el, anchor: 'bottom' })
             .setLngLat([p.lng, p.lat])
             .setPopup(popup)
             .addTo(map);
 
-        el.addEventListener('click', () => highlightCard(idx));
+        el.addEventListener('click', () => highlightCard(isPrimary ? idx : group[0]));
 
         markers.push(marker);
         popups.push(popup);
@@ -123,8 +143,51 @@ function buildPopupHTML(p, idx) {
                     <button onclick="focusPoint(${idx + 1})" ${idx === TOUR_DATA.length - 1 ? 'disabled' : ''} title="Điểm sau"
                         style="flex:none;width:34px;border:1.5px solid ${accent};background:#fff;color:${accent};border-radius:10px;font-size:18px;font-weight:700;cursor:pointer;font-family:inherit;${idx === TOUR_DATA.length - 1 ? 'opacity:.35;cursor:default;' : ''}">›</button>
                 </div>
+                <button onclick="navigateTo(${idx})"
+                   style="display:flex;align-items:center;justify-content:center;gap:5px;width:100%;margin-top:8px;padding:6px 0;border:1.5px solid ${accent};border-radius:10px;color:${accent};background:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">
+                   <i class="fa-solid fa-diamond-turn-right"></i> Chỉ đường
+                </button>
             </div>
         </div>`;
+}
+
+function buildMarkerSVG(label, color) {
+    const len = label.length;
+    const fontSize = len <= 2 ? 18 : len <= 3 ? 13 : len <= 4 ? 11 : 9;
+    const y = fontSize >= 14 ? 28 : 27;
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="44" height="54" viewBox="0 0 44 54">
+        <path d="M22 0C9.85 0 0 9.85 0 22c0 14 22 32 22 32s22-18 22-32C44 9.85 34.15 0 22 0z" fill="${color}"/>
+        <circle cx="22" cy="22" r="15" fill="white"/>
+        <text x="22" y="${y}" font-family="Arial, sans-serif" font-size="${fontSize}" font-weight="bold" fill="${color}" text-anchor="middle">${label}</text>
+    </svg>`;
+}
+
+function buildGroupPopupHTML(group) {
+    return `<div style="width:250px;font-family:'Be Vietnam Pro',sans-serif;">
+        ${group.map((idx, i) => {
+            const p = TOUR_DATA[idx];
+            const accent = legColor(p.leg);
+            return `${i > 0 ? '<div style="border-top:1.5px solid #e2e8f0;"></div>' : ''}
+                <div style="padding:12px 14px;">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                        <div style="background:${accent};color:white;min-width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;box-shadow:0 2px 6px rgba(0,0,0,.15);">${p.order}</div>
+                        <div>
+                            <p style="margin:0;color:${accent};font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.03em;">${p.time}</p>
+                            <h3 style="margin:2px 0 0;font-size:14px;font-weight:800;color:#1e293b;line-height:1.3;">${p.title}</h3>
+                        </div>
+                    </div>
+                    <p style="margin:0 0 8px;font-size:12px;color:#64748b;line-height:1.5;">${p.short}</p>
+                    <button onclick="openModal(${idx})"
+                        style="width:100%;background:${accent};color:white;border:none;padding:7px 0;border-radius:10px;font-weight:600;font-size:12px;cursor:pointer;font-family:inherit;">Xem chi tiết</button>
+                </div>`;
+        }).join('')}
+        <div style="border-top:1.5px solid #e2e8f0;padding:10px 14px 12px;">
+            <button onclick="navigateTo(${group[0]})"
+               style="display:flex;align-items:center;justify-content:center;gap:5px;width:100%;padding:7px 0;border:1.5px solid #7c3aed;border-radius:10px;color:#7c3aed;background:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">
+               <i class="fa-solid fa-diamond-turn-right"></i> Chỉ đường đến đây
+            </button>
+        </div>
+    </div>`;
 }
 
 /* ---------------------------------------------------------
@@ -170,13 +233,23 @@ function drawBoatLine() {
 }
 
 /* Đường đi-về buổi tối 14/8 (nét đứt tím) — resort → Nhà hàng Lộc Phú dự Gala → về lại resort */
-function drawEveningLine() {
+async function drawEveningLine() {
     if (typeof EVENING_PATH === 'undefined' || !EVENING_PATH.length) return;
-    const coords = EVENING_PATH.map(i => [TOUR_DATA[i].lng, TOUR_DATA[i].lat]);
-    addLineLayer('route-evening', {
-        type: 'LineString',
-        coordinates: coords
-    }, '#7c3aed', true);
+    const pts = EVENING_PATH.map(i => TOUR_DATA[i]);
+    const coords = pts.map(p => `${p.lng},${p.lat}`).join(';');
+    const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${coords}`
+              + `?geometries=geojson&overview=full&access_token=${MAPBOX_TOKEN}`;
+    try {
+        const res = await fetch(url);
+        const data = await res.json();
+        if (data.routes && data.routes.length) {
+            addLineLayer('route-evening', data.routes[0].geometry, '#7c3aed', true);
+        } else {
+            addLineLayer('route-evening', straightLine(pts), '#7c3aed', true);
+        }
+    } catch {
+        addLineLayer('route-evening', straightLine(pts), '#7c3aed', true);
+    }
 }
 
 /* Thêm 1 layer line vào bản đồ */
@@ -261,36 +334,49 @@ function haversineKm(a, b) {
 function toggleLeg(leg) {
     legVisible[leg] = !legVisible[leg];
     const show = legVisible[leg];
-    const disp = show ? '' : 'none';
 
-    // Markers thuộc tuyến (resort 'pivot' luôn hiển thị)
+    const processed = new Set();
     TOUR_DATA.forEach((p, idx) => {
-        if (p.leg === leg) markers[idx].getElement().style.display = disp;
+        const key = `${p.lat},${p.lng}`;
+        const group = coordGroups[key];
+
+        if (group.length === 1) {
+            if (p.leg === leg) markers[idx].getElement().style.display = show ? '' : 'none';
+        } else if (!processed.has(key)) {
+            processed.add(key);
+            const visible = group.filter(i => {
+                const l = TOUR_DATA[i].leg;
+                return l === 'pivot' || legVisible[l] !== false;
+            });
+            const el = markers[group[0]].getElement();
+            if (visible.length === 0) {
+                el.style.display = 'none';
+            } else {
+                el.style.display = '';
+                const label = visible.map(i => TOUR_DATA[i].order).join('+');
+                el.innerHTML = buildMarkerSVG(label, legColor(TOUR_DATA[visible[0]].leg));
+            }
+        }
     });
 
-    // Đường tuyến
     const lineId = leg === 'go' ? 'route-go' : 'route-back';
     if (map.getLayer(lineId)) {
         map.setLayoutProperty(lineId, 'visibility', show ? 'visible' : 'none');
     }
-    // Đường tàu gắn với lượt đi
     if (leg === 'go' && map.getLayer('route-boat')) {
         map.setLayoutProperty('route-boat', 'visibility', show ? 'visible' : 'none');
     }
 
-    // Chip thời gian chặng thuộc tuyến
     SEGMENTS.forEach(seg => {
         if (seg.route !== leg) return;
         const el = document.getElementById('seg-' + seg.from);
         if (el) el.style.display = show ? '' : 'none';
     });
 
-    // Đóng popup của tuyến bị ẩn
     if (!show) {
         popups.forEach((pop, idx) => { if (TOUR_DATA[idx].leg === leg) pop.remove(); });
     }
 
-    // Cập nhật trạng thái nút
     const btn = document.getElementById('toggle-' + leg);
     if (btn) btn.classList.toggle('off', !show);
 }
@@ -310,14 +396,141 @@ function fitToBounds() {
 function focusPoint(idx) {
     if (!map) return;
     const p = TOUR_DATA[idx];
-    // Điểm trong vịnh nằm sát nhau -> zoom gần hơn để thấy rõ
-    const zoom = p.boat ? 16 : 15;
-    map.flyTo({ center: [p.lng, p.lat], zoom: zoom, speed: 1.8, curve: 1.3,  essential: true });
+    const key = `${p.lat},${p.lng}`;
+    const group = coordGroups[key];
+    const primaryIdx = (group && group.length > 1) ? group[0] : idx;
 
-    popups.forEach((pop, i) => { if (i !== idx) pop.remove(); });
-    if (!popups[idx].isOpen()) markers[idx].togglePopup();
+    const zoom = p.boat ? 16 : 15;
+    map.flyTo({ center: [p.lng, p.lat], zoom: zoom, speed: 1.8, curve: 1.3, essential: true });
+
+    popups.forEach((pop, i) => { if (i !== primaryIdx) pop.remove(); });
+    if (!popups[primaryIdx].isOpen()) markers[primaryIdx].togglePopup();
 
     if (typeof highlightCard === 'function') highlightCard(idx);
+}
+
+/* ---------------------------------------------------------
+   Chỉ đường từ vị trí hiện tại đến điểm tour
+   --------------------------------------------------------- */
+const NAV_ROUTE_ID = 'nav-route';
+const NAV_OFF_ROUTE_M = 200;
+let navWatchId = null;
+let navRouteCoords = null;
+let navFitted = false;
+let navRerouting = false;
+
+function navigateTo(idx) {
+    const dest = TOUR_DATA[idx];
+
+    if (!navigator.geolocation) {
+        alert('Trình duyệt không hỗ trợ GPS.');
+        return;
+    }
+
+    if (navWatchId !== null) navigator.geolocation.clearWatch(navWatchId);
+
+    if (typeof closeModal === 'function') closeModal();
+    popups.forEach(p => p.remove());
+
+    navRouteCoords = null;
+    navFitted = false;
+
+    navWatchId = navigator.geolocation.watchPosition(
+        (pos) => onNavPosition(pos, dest),
+        (err) => {
+            if (err.code === 1) alert('Vui lòng cho phép truy cập vị trí.');
+            else alert('Không thể xác định vị trí.');
+        },
+        { enableHighAccuracy: true, maximumAge: 5000 }
+    );
+}
+
+async function onNavPosition(pos, dest) {
+    const { latitude: lat, longitude: lng } = pos.coords;
+
+    if (!locateMarker) {
+        const el = document.createElement('div');
+        el.className = 'locate-dot';
+        el.innerHTML = '<div class="locate-ping"></div><div class="locate-core"></div>';
+        locateMarker = new mapboxgl.Marker({ element: el })
+            .setLngLat([lng, lat]).addTo(map);
+    } else {
+        locateMarker.setLngLat([lng, lat]);
+    }
+
+    const needRoute = !navRouteCoords
+        || minDistToRoute(lat, lng, navRouteCoords) > NAV_OFF_ROUTE_M;
+
+    if (!needRoute || navRerouting) return;
+
+    navRerouting = true;
+    const coords = `${lng},${lat};${dest.lng},${dest.lat}`;
+    const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${coords}`
+              + `?geometries=geojson&overview=full&access_token=${MAPBOX_TOKEN}`;
+    try {
+        const res = await fetch(url);
+        const data = await res.json();
+        if (!data.routes || !data.routes.length) return;
+        const route = data.routes[0];
+        navRouteCoords = route.geometry.coordinates;
+        addLineLayer(NAV_ROUTE_ID, route.geometry, '#10b981', false);
+
+        if (!navFitted) {
+            navFitted = true;
+            const bounds = new mapboxgl.LngLatBounds();
+            route.geometry.coordinates.forEach(c => bounds.extend(c));
+            map.fitBounds(bounds, { padding: 80, duration: 1200 });
+        }
+
+        showNavInfo(dest, formatDuration(route.duration), formatDistance(route.distance));
+    } catch (err) {
+        console.error('Nav reroute error:', err);
+    } finally {
+        navRerouting = false;
+    }
+}
+
+function minDistToRoute(lat, lng, coords) {
+    let min = Infinity;
+    for (const c of coords) {
+        const d = haversineKm({ lat, lng }, { lat: c[1], lng: c[0] }) * 1000;
+        if (d < min) min = d;
+    }
+    return min;
+}
+
+function showNavInfo(dest, duration, distance) {
+    clearNavInfo();
+    const div = document.createElement('div');
+    div.id = 'nav-info';
+    div.innerHTML = `
+        <div class="nav-info-body">
+            <div style="flex:1;min-width:0;">
+                <p class="nav-title">${dest.title}</p>
+                <p class="nav-meta"><i class="fa-solid fa-car-side"></i> ${duration} · ${distance}</p>
+            </div>
+            <button onclick="clearNav()" title="Đóng" class="nav-close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>`;
+    document.getElementById('map-main').appendChild(div);
+}
+
+function clearNav() {
+    if (navWatchId !== null) {
+        navigator.geolocation.clearWatch(navWatchId);
+        navWatchId = null;
+    }
+    navRouteCoords = null;
+    navFitted = false;
+    if (map.getLayer(NAV_ROUTE_ID)) map.removeLayer(NAV_ROUTE_ID);
+    if (map.getSource(NAV_ROUTE_ID)) map.removeSource(NAV_ROUTE_ID);
+    clearNavInfo();
+}
+
+function clearNavInfo() {
+    const el = document.getElementById('nav-info');
+    if (el) el.remove();
 }
 
 /* ---------------------------------------------------------
@@ -355,6 +568,60 @@ function enableCoordPicker() {
 
         console.log(snippet);
     });
+}
+
+/* ---------------------------------------------------------
+   Vị trí hiện tại (GPS)
+   --------------------------------------------------------- */
+let locateMarker = null;
+let locateWatchId = null;
+
+function locateMe() {
+    const btn = document.getElementById('locate-btn');
+    if (!navigator.geolocation) {
+        alert('Trình duyệt không hỗ trợ GPS.');
+        return;
+    }
+
+    if (locateWatchId !== null) {
+        navigator.geolocation.clearWatch(locateWatchId);
+        locateWatchId = null;
+        if (locateMarker) { locateMarker.remove(); locateMarker = null; }
+        btn.classList.remove('text-blue-600', 'bg-blue-50');
+        btn.classList.add('text-brand-700');
+        return;
+    }
+
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+
+    locateWatchId = navigator.geolocation.watchPosition(
+        (pos) => {
+            const { latitude: lat, longitude: lng } = pos.coords;
+
+            btn.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i>';
+            btn.classList.remove('text-brand-700');
+            btn.classList.add('text-blue-600', 'bg-blue-50');
+
+            if (!locateMarker) {
+                const el = document.createElement('div');
+                el.className = 'locate-dot';
+                el.innerHTML = '<div class="locate-ping"></div><div class="locate-core"></div>';
+                locateMarker = new mapboxgl.Marker({ element: el })
+                    .setLngLat([lng, lat])
+                    .addTo(map);
+                map.flyTo({ center: [lng, lat], zoom: 14, speed: 1.5 });
+            } else {
+                locateMarker.setLngLat([lng, lat]);
+            }
+        },
+        (err) => {
+            btn.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i>';
+            locateWatchId = null;
+            if (err.code === 1) alert('Vui lòng cho phép truy cập vị trí.');
+            else alert('Không thể xác định vị trí.');
+        },
+        { enableHighAccuracy: true, maximumAge: 5000 }
+    );
 }
 
 /* ---------------------------------------------------------

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sơ đồ chỗ ngồi · Vina Takeuchi 2026 | Viet Sun Travel</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind config (đồng nhất với index.html) -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Be Vietnam Pro', 'sans-serif'] },
+                    colors: {
+                        brand: {
+                            50:'#eff6ff',100:'#dbeafe',200:'#bfdbfe',300:'#93c5fd',400:'#60a5fa',
+                            500:'#3b82f6',600:'#2563eb',700:'#1d4ed8',800:'#1e40af',900:'#1e3a8a',950:'#172554'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link rel="stylesheet" href="css/seats.css">
+</head>
+
+<body class="bg-slate-100 antialiased text-slate-800" style="font-family:'Be Vietnam Pro',sans-serif">
+
+<!-- ====================== BANNER CHỈNH SỬA ====================== -->
+<div id="edit-banner">
+    <i class="fa-solid fa-pencil text-amber-500"></i>
+    Đang chỉnh sửa — click vào ghế để xếp chỗ
+    <div class="flex items-center gap-2 ml-4">
+<button id="clear-btn"
+            class="px-3 py-1 rounded-lg bg-white/80 hover:bg-white text-red-500 text-[11px] font-semibold transition border border-red-200">
+            <i class="fa-solid fa-trash mr-1"></i>Xóa hết
+        </button>
+        <button onclick="document.getElementById('lock-btn').click()"
+            class="px-3 py-1 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-[11px] font-semibold transition">
+            <i class="fa-solid fa-lock mr-1"></i>Khóa
+        </button>
+    </div>
+</div>
+
+<!-- ====================== HEADER ====================== -->
+<header class="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+
+        <!-- Logo + tiêu đề -->
+        <div class="flex items-center gap-3 min-w-0">
+            <a href="index.html" title="Về bản đồ lộ trình"
+               class="w-9 h-9 rounded-xl bg-brand-50 flex items-center justify-center text-brand-600 hover:bg-brand-100 transition shrink-0">
+                <i class="fa-solid fa-map-location-dot"></i>
+            </a>
+            <div class="min-w-0">
+                <p class="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Viet Sun Travel</p>
+                <h1 class="text-base sm:text-lg font-extrabold text-slate-800 leading-tight truncate">
+                    Sơ đồ chỗ ngồi xe
+                </h1>
+            </div>
+        </div>
+
+        <!-- Nút khóa -->
+        <button id="lock-btn" title="Khóa / Mở chỉnh sửa"
+            class="w-9 h-9 rounded-xl border-2 border-slate-200 bg-white flex items-center justify-center text-slate-500 hover:border-brand-300 hover:text-brand-600 transition">
+            <i id="lock-icon" class="fa-solid fa-lock"></i>
+        </button>
+    </div>
+</header>
+
+<!-- ====================== MAIN LAYOUT ====================== -->
+<main class="max-w-5xl mx-auto px-4 sm:px-6 py-6 flex flex-col items-center gap-5">
+
+    <!-- ===== 2 SƠ ĐỒ XE ===== -->
+    <div class="flex gap-6 items-start justify-center flex-wrap">
+        <!-- Tầng 1 -->
+        <div>
+            <p class="text-sm font-bold text-slate-600 mb-2 text-center">
+                <i class="fa-solid fa-circle text-brand-500 text-[8px] mr-1"></i>Tầng 1
+            </p>
+            <div class="bus-v">
+                <div class="bus-v-front">
+                    <div class="driver-area">
+                        <i class="fa-solid fa-dharmachakra"></i>
+                        <span>Tài xế</span>
+                    </div>
+                    <div class="entrance-area">
+                        <i class="fa-solid fa-door-open"></i>
+                        <span>Cửa lên</span>
+                    </div>
+                </div>
+                <div class="bus-v-seats" id="seat-grid-t1"></div>
+                <div class="bus-v-back">ĐUÔI XE</div>
+            </div>
+        </div>
+
+        <!-- Tầng 2 -->
+        <div>
+            <p class="text-sm font-bold text-slate-600 mb-2 text-center">
+                <i class="fa-solid fa-circle text-orange-500 text-[8px] mr-1"></i>Tầng 2
+            </p>
+            <div class="bus-v">
+                <div class="bus-v-front">
+                    <div class="driver-area">
+                        <i class="fa-solid fa-dharmachakra"></i>
+                        <span>Tài xế</span>
+                    </div>
+                    <div class="entrance-area">
+                        <i class="fa-solid fa-door-open"></i>
+                        <span>Cửa lên</span>
+                    </div>
+                </div>
+                <div class="bus-v-seats" id="seat-grid-t2"></div>
+                <div class="bus-v-back">ĐUÔI XE</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Legend + Stats -->
+    <div class="flex items-center justify-center flex-wrap gap-4 text-[11px] text-slate-500">
+        <span class="flex items-center gap-1.5">
+            <span class="inline-block w-4 h-3 rounded border-2 border-dashed border-slate-300 bg-white"></span>Trống
+        </span>
+        <span class="flex items-center gap-1.5">
+            <span class="inline-block w-4 h-3 rounded border-2 border-brand-500 bg-brand-50"></span>T1
+        </span>
+        <span class="flex items-center gap-1.5">
+            <span class="inline-block w-4 h-3 rounded border-2 border-orange-500 bg-orange-50"></span>T2
+        </span>
+        <span class="text-sm font-extrabold text-brand-600" id="stat-count">0 / 40 ghế</span>
+        <button id="excel-btn"
+            class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-semibold transition shadow-sm">
+            <i class="fa-solid fa-file-excel"></i>Export Excel
+        </button>
+    </div>
+
+    <!-- Hidden elements for JS compatibility -->
+    <div id="stat-bar" class="hidden"></div>
+    <div id="stat-summary" class="hidden"></div>
+    <ul id="passenger-list" class="hidden"></ul>
+</main>
+
+<!-- ====================== FLOATING MAP BUTTON ====================== -->
+<a href="index.html" title="Xem bản đồ lộ trình"
+    class="fixed bottom-5 right-5 z-30 w-11 h-11 rounded-xl bg-white shadow-lg border border-slate-200 flex items-center justify-center text-brand-700 hover:bg-brand-50 hover:shadow-xl transition">
+    <i class="fa-solid fa-map-location-dot"></i>
+</a>
+
+<!-- ====================== MODAL CHỈNH SỬA GHẾ ====================== -->
+<div id="seat-modal" class="fixed inset-0 z-50 items-center justify-center p-4">
+    <!-- Backdrop -->
+    <div id="modal-backdrop" class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm"></div>
+
+    <!-- Hộp modal -->
+    <div class="relative bg-white w-full max-w-sm rounded-2xl shadow-2xl overflow-hidden">
+        <!-- Header modal -->
+        <div class="bg-gradient-to-r from-brand-700 to-brand-600 px-5 py-4 text-white">
+            <p class="text-[11px] font-semibold uppercase tracking-widest opacity-75 mb-0.5">Phân công chỗ ngồi</p>
+            <h3 id="modal-seat-label" class="text-lg font-extrabold">Ghế 01 · Tầng 1</h3>
+        </div>
+
+        <!-- Body modal -->
+        <div class="p-5">
+            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">
+                Tên hành khách
+            </label>
+            <input id="modal-name-input" type="text"
+                placeholder="Nhập họ và tên..."
+                maxlength="50"
+                class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-brand-400 focus:outline-none text-slate-800 font-medium text-sm transition">
+        </div>
+
+        <!-- Footer modal -->
+        <div class="px-5 pb-5 flex items-center gap-2">
+            <button id="modal-delete-btn"
+                class="flex items-center gap-1.5 px-3 py-2.5 rounded-xl border-2 border-red-200 text-red-500 hover:bg-red-50 text-sm font-semibold transition">
+                <i class="fa-solid fa-trash text-xs"></i>Xóa
+            </button>
+            <button id="modal-cancel-btn"
+                class="flex-1 py-2.5 rounded-xl border-2 border-slate-200 text-slate-600 hover:bg-slate-50 text-sm font-semibold transition">
+                Hủy
+            </button>
+            <button id="modal-save-btn"
+                class="flex-1 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold transition">
+                <i class="fa-solid fa-check mr-1"></i>Lưu
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ====================== SCRIPTS ====================== -->
+<script src="js/config.js"></script>
+<script src="js/seats-data.js"></script>
+<script src="js/seats.js"></script>
+
+</body>
+</html>

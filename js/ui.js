@@ -153,6 +153,9 @@ function openModal(idx) {
     prevBtn.onclick = () => { if (idx > 0) openModal(idx - 1); };
     nextBtn.onclick = () => { if (idx < TOUR_DATA.length - 1) openModal(idx + 1); };
 
+    const dirBtn = document.getElementById('modal-directions');
+    if (dirBtn) dirBtn.onclick = () => navigateTo(idx);
+
     modal.classList.remove('hidden');
     modal.classList.add('flex');
     document.body.style.overflow = 'hidden';

@@ -1,6 +1,5 @@
 /* =========================================================
-   FILE MẪU CẤU HÌNH · sao chép thành js/config.js rồi điền token thật
-   (chạy: copy js\config.example.js js\config.js  — trên Windows)
-   Lấy Access Token tại: https://account.mapbox.com/access-tokens/
+   FILE MẪU CẤU HÌNH
+   Config được load tự động từ /api/config (server đọc .env)
+   Sao chép .env.example thành .env rồi điền giá trị thật.
    ========================================================= */
-window.MAPBOX_TOKEN = 'YOUR_MAPBOX_TOKEN';

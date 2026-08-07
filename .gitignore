@@ -1,3 +1,17 @@
 # Hệ thống
 .DS_Store
 Thumbs.db
+
+# Dependencies
+node_modules/
+
+# Environment
+.env
+
+# Firebase service account
+firebase-adminsdk.json
+*-firebase-adminsdk-*.json
+
+# Vercel
+.vercel/
+.vercel
