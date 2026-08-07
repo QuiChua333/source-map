@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bản Đồ Tương Tác - Tour Ninh Chữ - Vĩnh Hy | Viet Sun Travel</title>
 
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="VST Tour" />
+    <link rel="apple-touch-icon" href="/images/icon-192.png" />
+    <meta name="theme-color" content="#2563eb" />
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -176,9 +184,15 @@
             </div>
 
             <!-- Modal footer: điều hướng điểm trước / sau (căn phải) -->
-            <div class="px-4 py-3 sm:px-6 sm:py-4 bg-slate-50 border-t border-slate-200 flex items-center justify-end gap-2 shrink-0">
-                <button id="modal-prev" title="Điểm trước" class="modal-nav"><i class="fa-solid fa-chevron-left"></i></button>
-                <button id="modal-next" title="Điểm sau" class="modal-nav"><i class="fa-solid fa-chevron-right"></i></button>
+            <div class="px-4 py-3 sm:px-6 sm:py-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between shrink-0">
+                <button id="modal-directions"
+                   class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border-2 border-brand-200 bg-white text-brand-600 hover:bg-brand-50 text-xs font-semibold transition cursor-pointer">
+                    <i class="fa-solid fa-diamond-turn-right"></i> Chỉ đường
+                </button>
+                <div class="flex items-center gap-2">
+                    <button id="modal-prev" title="Điểm trước" class="modal-nav"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button id="modal-next" title="Điểm sau" class="modal-nav"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
             </div>
         </div>
     </div>
